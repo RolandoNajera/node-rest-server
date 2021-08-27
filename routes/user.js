@@ -4,26 +4,29 @@ const { getUser, putUser, postUser, deleteUser, patchUser } = require('../contro
 const { validateFields } = require('../middlewares/validate-fields');
 const { isValidRole, existEmail, existUserId } = require('../helpers/db-validators');
 
-const router =  Router();
+const router = Router();
 
-router.get( '/', getUser );
+router.get('/', getUser);
 
-router.put( '/:id', [
-    check('id', 'Is not a valid ID').isMongoId().custom( existUserId ),
-    check('role').custom( isValidRole ),
+router.put('/:id', [
+    check('id', 'Is not a valid ID').isMongoId().custom(existUserId),
+    check('role').custom(isValidRole),
     validateFields
-], putUser );
+], putUser);
 
-router.post( '/', [
+router.post('/', [
     check('name', 'Name is required.').not().isEmpty(),
-    check('password', 'Password muts have at least 6 characters.').not().isEmpty().isLength( { min: 6 } ),
-    check('email', 'Email not valid.').isEmail().custom( existEmail ),
-    check('role').custom( isValidRole ),
+    check('password', 'Password muts have at least 6 characters.').not().isEmpty().isLength({ min: 6 }),
+    check('email', 'Email not valid.').isEmail().custom(existEmail),
+    check('role').custom(isValidRole),
     validateFields
-], postUser );
+], postUser);
 
-router.delete( '/:id', deleteUser );
+router.delete('/:id', [
+    check('id', 'Is not a valid ID').isMongoId().custom(existUserId),
+    validateFields
+], deleteUser);
 
-router.patch( '/', patchUser );
+router.patch('/', patchUser);
 
 module.exports = router;

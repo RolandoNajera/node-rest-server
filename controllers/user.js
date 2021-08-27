@@ -5,7 +5,6 @@ const User = require('../models/user');
 const getUser = async (request, response) => {
 
     const { limit = 5, from = 0 } = request.query;
-
     const query = { status: true };
 
 
